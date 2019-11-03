@@ -1,0 +1,8 @@
+*.swp
+*.out
+*.o
+*.log
+*.pdf
+.DS_Store
+test*
+tmp/
