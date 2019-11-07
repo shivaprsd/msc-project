@@ -2,6 +2,7 @@
 *.out
 *.o
 *.log
+*.mp4
 *.pdf
 .DS_Store
 test*
