@@ -18,6 +18,21 @@ void kuramoto(double t, double theta[], double thdot[])
 	}
 }
 
+double ord_param(double theta[])
+{
+	int i;
+	double sr, si;
+
+	sr = si = 0;
+	for (i = 0; i < N; ++i) {
+		sr += cos(theta[i]);
+		si += sin(theta[i]);
+	}
+	sr /= N;
+	si /= N;
+	return sqrt(sr * sr + si * si);
+}
+
 void print_osc(double theta[])
 {
 	int i, c;
