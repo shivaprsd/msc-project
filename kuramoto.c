@@ -46,13 +46,11 @@ int main()
 {
 	int t, i;
 	double h, theta[N];
-	const double sig_sqr = N * N / (8 * log(2));
 
 	for (i = 0; i < N; ++i) {
 		theta[i] = frand(0, 2 * M_PI);
-		omega[i] = 2 * M_PI * exp(-SQR(i - N / 2) / (2 * sig_sqr));
+		omega[i] = gauss(2 * M_PI, M_PI / 12);
 	}
-	printf("#K = %.2lf, g(w): Gaussian\n", K);
 	h = 1e-3;
 	for (t = 0; t < 2e4; ++t) {
 		rk4(t * h, theta, N, kuramoto, h, theta);
