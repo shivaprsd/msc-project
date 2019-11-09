@@ -7,7 +7,7 @@
 
 double omega[N];
 
-void kuramoto(double t, double theta[], double thdot[])
+void kuramoto(double t, double theta[N], double thdot[N])
 {
 	int i, j;
 
@@ -18,26 +18,24 @@ void kuramoto(double t, double theta[], double thdot[])
 	}
 }
 
-double ord_param(double theta[])
+double ord_param(double *theta, unsigned int n)
 {
 	int i;
 	double sr, si;
 
 	sr = si = 0;
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i < n; ++i) {
 		sr += cos(theta[i]);
 		si += sin(theta[i]);
 	}
-	sr /= N;
-	si /= N;
-	return sqrt(sr * sr + si * si);
+	return sqrt(sr * sr + si * si) / n;
 }
 
-void print_osc(double theta[])
+void print_osc(double *theta, unsigned int n)
 {
 	int i, c;
 
-	for (i = 0; i < N; ++i) {
+	for (i = 0; i < n; ++i) {
 		c = (sin(theta[i]) > 0.98) ? 7 : 8;
 		printf("%e\t%e\t%d\n", cos(theta[i]), sin(theta[i]), c);
 	}
@@ -59,7 +57,7 @@ int main()
 	for (t = 0; t < 2e4; ++t) {
 		rk4(t * h, theta, N, kuramoto, h, theta);
 		if (t % (int) (0.02 / h + 0.5) == 0)
-			print_osc(theta);
+			print_osc(theta, N);
 	}
 	return 0;
 }
