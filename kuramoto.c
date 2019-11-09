@@ -45,17 +45,21 @@ void print_osc(double *theta, unsigned int n)
 int main()
 {
 	int t, i;
-	double h, theta[N];
+	double r, h, theta[N];
 
 	for (i = 0; i < N; ++i) {
 		theta[i] = frand(0, 2 * M_PI);
 		omega[i] = gauss(2 * M_PI, M_PI / 12);
 	}
 	h = 1e-3;
-	for (t = 0; t < 2e4; ++t) {
+	for (t = 0; t < 1e3; ++t)
+		rk4(t * h, theta, N, kuramoto, h, theta);
+	for (r = 0.0; t < 2e4; ++t) {
 		rk4(t * h, theta, N, kuramoto, h, theta);
 		if (t % (int) (0.02 / h + 0.5) == 0)
 			print_osc(theta, N);
+		r += ord_param(theta, N);
 	}
+	fprintf(stderr, "%e\t%e\n", K, r / 1e5);
 	return 0;
 }
