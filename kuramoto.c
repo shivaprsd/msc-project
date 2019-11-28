@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <math.h>
+#include <omp.h>
 #include "util.h"
 #define N 100
-#define K 2.3
 #define SQR(x) (pow(x, 2))
 
-double omega[N];
+double K, omega[N];
 
 void kuramoto(double t, double theta[N], double thdot[N])
 {
@@ -52,14 +52,17 @@ int main()
 		omega[i] = gauss(2 * M_PI, M_PI / 12);
 	}
 	h = 1e-3;
-	for (t = 0; t < 1e3; ++t)
-		rk4(t * h, theta, N, kuramoto, h, theta);
-	for (r = 0.0; t < 2e4; ++t) {
-		rk4(t * h, theta, N, kuramoto, h, theta);
-		if (t % (int) (0.02 / h + 0.5) == 0)
-			print_osc(theta, N);
-		r += ord_param(theta, N);
+#pragma omp parallel for private(t, r) firstprivate(theta)
+	for (i = 0; i <= 20 ; ++i) {
+		K = i * 0.05;
+		for (t = 0; t < 1e3; ++t)
+			rk4(t * h, theta, N, kuramoto, h, theta);
+		for (r = 0.0; t < 1e5; ++t) {
+			rk4(t * h, theta, N, kuramoto, h, theta);
+			r += ord_param(theta, N);
+		}
+#pragma omp critical
+		printf("%e\t%e\n", K, r / 1e5);
 	}
-	fprintf(stderr, "%e\t%e\n", K, r / 1e5);
 	return 0;
 }
