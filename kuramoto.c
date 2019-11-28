@@ -2,7 +2,7 @@
 #include <math.h>
 #include "network.h"
 #include "util.h"
-#define N 50
+#define N 100
 #define K 5.0
 #define SQR(x) (pow(x, 2))
 
@@ -47,28 +47,21 @@ int main()
 {
 	int t, i;
 	const int T = 5e4;
-	const double p = 0.3;
+	const double p = 0.15;
 	double r, h, theta[N];
 
 	for (i = 0; i < N; ++i) {
 		theta[i] = frand(0, 2 * M_PI);
-		omega[i] = gauss(2 * M_PI, M_PI / 12);
+		omega[i] = gauss(2 * M_PI, M_PI / 6);
 	}
 	init_ring(ring, N);
 	rewire(ring, N, p);
-	h = 1e-3;
+	h = 1e-2;
 	printf("#K = %.2lf, Regular ring\n", K);
-	plot_ring(ring, N);
-	printf("\n\n");
-	for (t = r = 0; t < T; ++t) {
-		if (t % (int) (0.02 / h + 0.5) == 0) {
-			print_osc(theta, N);
-			printf("\n\n");
-		}
-		if (t >= T / 2)
-			r += ord_param(theta, N);
+	for (t = 0; t < T; ++t) {
+		r = ord_param(theta, N);
+		printf("%.7e\t%.7e\n", t * h, r);
 		rk4(t * h, theta, N, kuramoto, h, theta);
 	}
-	fprintf(stderr, "%.2lf\t%.2lf\n", K, 2 * r / T);
 	return 0;
 }
