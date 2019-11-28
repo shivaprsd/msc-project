@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$1" != "-nc" ]; then
     echo "Compiling and running..."
-    cc -I "../class" kuramoto.c util.o &&
+    cc -I "../class" kuramoto.c network.o util.o &&
         ./a.out > test.dat
 fi
 echo "Plotting..."
