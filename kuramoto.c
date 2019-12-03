@@ -2,23 +2,20 @@
 #include <math.h>
 #include "network.h"
 #include "util.h"
-#define N 100
-#define K 5.0
-#define SQR(x) (pow(x, 2))
+#define N 1000
 
 double omega[N];
-int ring[N];
+struct adjnode *adjlist[N] = { NULL };
 
 void kuramoto(double t, double theta[N], double thdot[N])
 {
-	int i, j;
+	int i;
+	struct adjnode *ap;
 
 	for (i = 0; i < N; ++i) {
 		thdot[i] = omega[i];
-		for (j = 0; j < N; ++j) {
-			if (adj(ring, i, j))
-				thdot[i] += K * sin(theta[j] - theta[i]);
-		}
+		for (ap = adjlist[i]; ap != NULL; ap = ap->next)
+			thdot[i] += ap->wt * sin(theta[ap->id - 1] - theta[i]);
 	}
 }
 
@@ -46,7 +43,7 @@ void print_osc(double *theta, unsigned int n)
 int main()
 {
 	int t, i;
-	const int T = 5e4;
+	const int T = 1e3;
 	const double p = 0.15;
 	double r, h, theta[N];
 
@@ -54,13 +51,12 @@ int main()
 		theta[i] = frand(0, 2 * M_PI);
 		omega[i] = gauss(2 * M_PI, M_PI / 6);
 	}
-	init_ring(ring, N);
-	rewire(ring, N, p);
+	readadjl(adjlist, N);
 	h = 1e-2;
-	printf("#K = %.2lf, Regular ring\n", K);
+	puts("# Time (a.u.)\tOrder parameter |r|");
 	for (t = 0; t < T; ++t) {
 		r = ord_param(theta, N);
-		printf("%.7e\t%.7e\n", t * h, r);
+		printf("%.2lf\t%.7e\n", t * h, r);
 		rk4(t * h, theta, N, kuramoto, h, theta);
 	}
 	return 0;
