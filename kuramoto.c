@@ -50,7 +50,7 @@ int main()
 		theta[i] = frand(0, 2 * M_PI);
 		omega[i] = gauss(2 * M_PI, M_PI / 3);
 	}
-	readadjl(adjlist, N);
+	readadjl(adjlist, N, UNDIR);
 	h = 1e-3;
 	puts("# Time (a.u.)\tOrder parameter |r|");
 	for (t = 0; t < T; ++t) {

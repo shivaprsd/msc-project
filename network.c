@@ -18,7 +18,7 @@ struct adjnode *install(struct adjnode **node, int id, int wt)
 	return ap;
 }
 
-int readadjl(struct adjnode **adjlist, int lim)
+int readadjl(struct adjnode **adjlist, int lim, enum nwtype t)
 {
 	int n1, n2, w, edgc;
 
@@ -30,7 +30,7 @@ int readadjl(struct adjnode **adjlist, int lim)
 			return -1;
 		}
 		++edgc;
-		if (install(&adjlist[HASH(n1)], n2, w) == NULL
+		if ((t == UNDIR && install(&adjlist[HASH(n1)], n2, w) == NULL)
 				|| install(&adjlist[HASH(n2)], n1, w) == NULL) {
 			fprintf(stderr, "Memory allocation error!\n");
 			return -1;

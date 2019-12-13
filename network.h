@@ -1,13 +1,14 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+enum nwtype { DIR, UNDIR };
 struct adjnode {
 	struct adjnode *next;
 	int id;
 	int wt;
 };
 struct adjnode *install(struct adjnode **node, int id, int wt);
-int readadjl(struct adjnode **adjlist, int lim);
+int readadjl(struct adjnode **adjlist, int lim, enum nwtype t);
 void printadjl(struct adjnode **adjlist, int lim);
 void degdist(struct adjnode **adjlist, int lim);
 
