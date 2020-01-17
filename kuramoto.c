@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <math.h>
+#include <omp.h>
 #include "network.h"
 #include "util.h"
 #define N 1000
 
 double K, omega[N];
 struct adjnode *adjlist[N] = { NULL };
+#pragma omp threadprivate(K)
 
 void kuramoto(double t, double theta[N], double thdot[N])
 {
@@ -43,7 +45,7 @@ void print_osc(double *theta, unsigned int n)
 int main()
 {
 	int t, i;
-	const int T = 5e3;
+	const int T = 1e4;
 	double r, h, theta[N];
 
 	for (i = 0; i < N; ++i) {
@@ -53,16 +55,17 @@ int main()
 	readadjl(adjlist, N, UNDIR);
 	h = 1e-3;
 	puts("# Coupling strength K\tOrder parameter |r|");
-	for (K = 1; K >= 0; K -= 0.05) {
+#pragma omp parallel for private(t, r) firstprivate(theta)
+	for (i = 0; i <= 20 ; ++i) {
+		K = i * 0.05;
 		for (t = 0; t < T; ++t)
 			rk4(t * h, theta, N, kuramoto, h, theta);
-		r = 0.0;
-		for (t = 0; t < T; ++t) {
-			r += ord_param(theta, N);
+		for (r = 0.0; t < 2 * T; ++t) {
 			rk4(t * h, theta, N, kuramoto, h, theta);
+			r += ord_param(theta, N);
 		}
-		fprintf(stderr, "%.2lf\t%.7e\n", K, r / T);
-		printf("%.2lf\t%.7e\n", K, r / T);
+#pragma omp critical
+		printf("%e\t%e\n", K, r / T);
 		fflush(stdout);
 	}
 	return 0;
