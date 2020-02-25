@@ -7,3 +7,5 @@
 .DS_Store
 test*
 tmp/
+sim
+evol

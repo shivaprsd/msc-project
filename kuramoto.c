@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <math.h>
+#include <omp.h>
 #include "network.h"
 #include "util.h"
 #define N 1000
 
 double omega[N];
 struct adjnode *adjlist[N] = { NULL };
+#pragma omp threadprivate(omega)
 
 void kuramoto(double t, double theta[N], double thdot[N])
 {
@@ -40,23 +42,44 @@ void print_osc(double *theta, unsigned int n)
 		printf("%e\t%e\n", cos(theta[i]), sin(theta[i]));
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	int t, i;
-	const int T = 5e3;
-	double r, h, theta[N];
+	int t, i, j;
+	const int T = 1e4;
+	char s[13];
+	double r, h, theta[N], theta0[N];
+	const double sigma = M_PI / 2;
+	FILE *fp;
 
-	for (i = 0; i < N; ++i) {
-		theta[i] = frand(0, 2 * M_PI);
-		omega[i] = gauss(2 * M_PI, M_PI / 3);
-	}
-	readadjl(adjlist, N, UNDIR);
+	fp = fopen(argv[argc - 1], "r");
+	for (i = 0; i < N; ++i)
+		fscanf(fp, "%le\t%le\n", &theta0[i], &omega[i]);
+	fclose(fp);
+	readadjl(adjlist, N, DIR);
 	h = 1e-3;
-	puts("# Time (a.u.)\tOrder parameter |r|");
-	for (t = 0; t < T; ++t) {
-		r = ord_param(theta, N);
-		printf("%.4lf\t%.7e\n", t * h, r);
-		rk4(t * h, theta, N, kuramoto, h, theta);
+
+#pragma omp parallel for private(i, t, r, s, fp, theta)
+	for (j = 0; j < 400; ++j) {
+		sprintf(s, "omega%.3d.dat", j + 1);
+		fp = fopen(s, "w");
+		for (i = 0; i < N; ++i) {
+			omega[i] = gauss(2 * M_PI, sigma);
+			fprintf(fp, "%d\t%.17le\n", i + 1, omega[i]);
+			fflush(stdout);
+		}
+		fclose(fp);
+		//puts("# Time (a.u.)\tOrder parameter |r|");
+		//printf("\"g(w): std dev = %.3lf\"\n", sigma);
+		copy_vec(theta0, theta, N);
+		for (t = 0; t < T; ++t)
+			rk4(t * h, theta, N, kuramoto, h, theta);
+		for (t = 0; t < T; ++t) {
+			r = ord_param(theta, N);
+			if (!(t % 100))
+#pragma omp critical
+				printf("%d\t%lf\n", j + 1, r);
+			rk4(t * h, theta, N, kuramoto, h, theta);
+		}
 	}
 	return 0;
 }
