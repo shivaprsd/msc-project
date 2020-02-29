@@ -43,19 +43,19 @@ void print_osc(double *theta, unsigned int n)
 int main()
 {
 	int t, i;
-	const int T = 5e3;
+	const int T = 1e5;
 	double r, h, theta[N];
 
-	for (i = 0; i < N; ++i) {
-		theta[i] = frand(0, 2 * M_PI);
-		omega[i] = gauss(2 * M_PI, M_PI / 3);
-	}
-	readadjl(adjlist, N, UNDIR);
+	for (i = 0; i < N; ++i)
+		scanf("%le\t%le\n", &theta[i], &omega[i]);
+	readadjl(adjlist, N, DIR);
 	h = 1e-3;
 	puts("# Time (a.u.)\tOrder parameter |r|");
 	for (t = 0; t < T; ++t) {
-		r = ord_param(theta, N);
-		printf("%.4lf\t%.7e\n", t * h, r);
+		if (!(t % 100)) {
+			r = ord_param(theta, N);
+			printf("%.4lf\t%.7e\n", t * h, r);
+		}
 		rk4(t * h, theta, N, kuramoto, h, theta);
 	}
 	return 0;
