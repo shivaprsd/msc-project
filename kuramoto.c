@@ -32,30 +32,40 @@ double ord_param(double *theta, unsigned int n)
 	return sqrt(sr * sr + si * si) / n;
 }
 
+double thwrap(double th)
+{
+	return ((th = fmod(th, 2 * M_PI)) > 0) ? th : th + 2 * M_PI;
+}
+
 void print_osc(double *theta, unsigned int n)
 {
 	int i;
 
 	for (i = 0; i < n; ++i)
-		printf("%e\t%e\n", cos(theta[i]), sin(theta[i]));
+		printf("%le\n", thwrap(theta[i]));
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	int t, i;
-	const int T = 5e3;
+	const int T = 1e5;
 	double r, h, theta[N];
+	FILE *fp;
 
-	for (i = 0; i < N; ++i) {
-		theta[i] = frand(0, 2 * M_PI);
-		omega[i] = gauss(2 * M_PI, M_PI / 3);
-	}
-	readadjl(adjlist, N, UNDIR);
+	fp = fopen(argv[argc - 1], "r");
+	for (i = 0; i < N; ++i)
+		fscanf(fp, "%le\t%le\n", &theta[i], &omega[i]);
+	for (i = N - 1; i >= 0; --i)
+		omega[i] -= omega[0];
+	fclose(fp);
+	readadjl(adjlist, N, DIR);
 	h = 1e-3;
-	puts("# Time (a.u.)\tOrder parameter |r|");
 	for (t = 0; t < T; ++t) {
-		r = ord_param(theta, N);
-		printf("%.4lf\t%.7e\n", t * h, r);
+		if (!(t % 100)) {
+			print_osc(theta, N);
+			printf("\n\n");
+			fflush(stdout);
+		}
 		rk4(t * h, theta, N, kuramoto, h, theta);
 	}
 	return 0;
