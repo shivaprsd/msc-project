@@ -51,6 +51,13 @@ int main(int argc, char *argv[])
 	const int T = 1e5;
 	double r, h, theta[N];
 	FILE *fp;
+	/* struct adjnode *p = NULL;
+
+	readadjl(adjlist, N, UNDIR);
+	for (i = 1; i <= N; ++i)
+		install(&p, i, 1);
+	bk(NULL, p, NULL, adjlist, N);
+	return 0; */
 
 	fp = fopen(argv[argc - 1], "r");
 	for (i = 0; i < N; ++i)

@@ -65,6 +65,50 @@ void degdist(struct adjnode **adjlist, int lim)
 	}
 }
 
+void intersect(struct adjnode *a, struct adjnode *b, struct adjnode **ab)
+{
+	struct adjnode *t;
+
+	for (; a != NULL; a = a->next) {
+		for (t = b; t != NULL; t = t->next) {
+			if (t->id == a->id) {
+				if (install(ab, a->id, a->wt) != NULL)
+					break;
+				fprintf(stderr, "Memory allocation error!\n");
+				return;
+			}
+		}
+	}
+}
+
+void bk(struct adjnode *r, struct adjnode *p, struct adjnode *x, struct adjnode
+	**adjlist, int lim)
+{
+	int n;
+	struct adjnode *v, *pnew, *xnew;
+
+	if (p == NULL && x == NULL) {
+		printadjl(&r, 1);
+		return;
+	}
+	while (p != NULL) {
+		v = p;
+		if ((n = v->id) > lim) {
+			fprintf(stderr, "Node %d is out of limits!\n", n);
+			return;
+		}
+		p = p->next;
+		v->next = r;
+		pnew = xnew = NULL;
+		intersect(p, adjlist[HASH(n)], &pnew);
+		intersect(x, adjlist[HASH(n)], &xnew);
+
+		bk(v, pnew, xnew, adjlist, lim);
+		v->next = x;
+		x = v;
+	}
+}
+
 void init_ring(int *ring, int n)
 {
 	int i;

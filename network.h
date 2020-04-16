@@ -11,6 +11,9 @@ struct adjnode *install(struct adjnode **node, int id, int wt);
 int readadjl(struct adjnode **adjlist, int lim, enum nwtype t);
 void printadjl(struct adjnode **adjlist, int lim);
 void degdist(struct adjnode **adjlist, int lim);
+void intersect(struct adjnode *a, struct adjnode *b, struct adjnode **out);
+void bk(struct adjnode *r, struct adjnode *p, struct adjnode *x, struct adjnode
+		**adjlist, int lim);
 
 void init_ring(int *ring, int n);
 void plot_ring(int *ring, int n);
