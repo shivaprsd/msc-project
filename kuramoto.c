@@ -52,11 +52,13 @@ int main(int argc, char *argv[])
 	double r, h, theta[N];
 	FILE *fp;
 	/* struct adjnode *p = NULL;
+	struct clique *c = NULL;
 
 	readadjl(adjlist, N, UNDIR);
 	for (i = 1; i <= N; ++i)
-		install(&p, i, 1);
-	bk(NULL, p, NULL, adjlist, N);
+		addnode(&p, i, 1);
+	bk(NULL, p, NULL, adjlist, N, &c);
+	printclqs(c, adjlist);
 	return 0; */
 
 	fp = fopen(argv[argc - 1], "r");
