@@ -14,8 +14,9 @@ struct clique {
 };
 struct adjnode *addnode(struct adjnode **node, int id, int wt);
 struct clique *addclq(struct clique **clq, struct adjnode *nodes, int dim);
-int readadjl(struct adjnode **adjlist, int lim, enum nwtype t);
+int readadjl(FILE *fp, struct adjnode **adjlist, int lim, enum nwtype t);
 void printadjl(struct adjnode **adjlist, int lim);
+void freeadjl(struct adjnode **adjlist, int lim);
 void printclqs(struct clique *clq, struct adjnode **adjlist);
 int adjmtx(struct adjnode **adjlist, int i, int j);
 void degdist(struct adjnode **adjlist, int lim);

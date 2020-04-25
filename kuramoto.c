@@ -54,10 +54,15 @@ int main(int argc, char *argv[])
 	/* struct adjnode *p = NULL;
 	struct clique *c = NULL;
 
-	readadjl(adjlist, N, UNDIR);
+	fp = fopen(argv[argc - 2], "r");
+	readadjl(fp, adjlist, N, UNDIR);
 	for (i = 1; i <= N; ++i)
 		addnode(&p, i, 1);
 	bk(NULL, p, NULL, adjlist, N, &c);
+	freeadjl(adjlist, N);
+	rewind(fp);
+	readadjl(fp, adjlist, N, DIR);
+	fclose(fp);
 	printclqs(c, adjlist);
 	return 0; */
 
@@ -67,7 +72,6 @@ int main(int argc, char *argv[])
 	for (i = N - 1; i >= 0; --i)
 		omega[i] -= omega[0];
 	fclose(fp);
-	readadjl(adjlist, N, DIR);
 	h = 1e-3;
 	for (t = 0; t < T; ++t) {
 		if (!(t % 100)) {

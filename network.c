@@ -32,12 +32,12 @@ struct clique *addclq(struct clique **clq, struct adjnode *nodes, int dim)
 	return cp;
 }
 
-int readadjl(struct adjnode **adjlist, int lim, enum nwtype t)
+int readadjl(FILE *fp, struct adjnode **adjlist, int lim, enum nwtype t)
 {
 	int n1, n2, w, edgc;
 
 	edgc = 0;
-	while (scanf("%d %d %d", &n1, &n2, &w) != EOF) {
+	while (fscanf(fp, "%d %d %d", &n1, &n2, &w) != EOF) {
 		if (n1 > lim || n2 > lim) {
 			fprintf(stderr, "Node %d is out of limits!\n",
 					(n1 > lim) ? n1 : n2);
@@ -64,6 +64,20 @@ void printadjl(struct adjnode **adjlist, int lim)
 			printf(" %d (%d)%s", ap->id, ap->wt,
 				(ap->next != NULL) ? "," : "");
 		putchar('\n');
+	}
+}
+
+void freeadjl(struct adjnode **adjlist, int lim)
+{
+	struct adjnode *ap, *next;
+	int i;
+
+	for (i = 0; i < lim; ++i) {
+		for (ap = adjlist[i]; ap != NULL; ap = next) {
+			next = ap->next;
+			free(ap);
+		}
+		adjlist[i] = NULL;
 	}
 }
 
