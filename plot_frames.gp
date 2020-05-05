@@ -1,29 +1,21 @@
 reset
 datafiles = system("ls tmp/out*")
-ones_foll = system("cat dclnet/ones-foll.txt")
 load 'std.gp'
-set xlabel "Node, i\n"
-set ylabel "Phase, θ_i"
-set title "dclnet\\_ni5\\_p07: oscillator dynamics\n"
-set label at 0, 2.08 * pi sprintf("σ = %s,  Ω (%s)", ARG1, ARG2) font fnt.",16"
-set xrange [-5:1005]
-set yrange [0:2 * pi]
-set cbrange [0:1]
+set xlabel "Clique (5-cell), i\n"
+set ylabel "Order parameter, |r_i|"
+set title "dclnet\\_ni5\\_p07:  simplical dynamics\n"
+set label at 0, 1.04 sprintf("σ = %s,  Ω (%s)", ARG1, ARG2) font fnt.",16"
+set xrange [:988]
+set yrange [0:1]
 set tics scale 0
 set xtics 100
-set ytics (0, "π/2" 0.5 * pi, "π" pi, "3π/2" 1.5 * pi, "2π" 2 * pi)
-set key at 1130, 2.2 * pi Left reverse horizontal
+set key at 1170, 1.1 Left reverse horizontal samplen 0
 
-array clr[1000]
-clr[1] = 7
-do for [i=2:1000] { clr[i] = 2 }
-do for [s in ones_foll] { clr[s] = 4 }
 h = 1e-3
 t = 1
 do for [f in datafiles] {
-    plot f every ::::999 u ($0 + 1):1:(clr[$0 + 1]) pt 6 lw 1.7 lc var \
-         title "not connected to 1", \
-         1/0 w p pt 6 lc 4 t "connected to 1", \
+    plot f u ($0 + 1):1:2 pt 7 ps 0.6 lc var title "cliques not containing 1", \
+         1/0 w p pt 7 ps 0.6 lc 7 t "cliques containing 1", \
          1/0 lc "white" title sprintf("t = %.3f", h * t)
     t = t + 1
     pause 0.02
