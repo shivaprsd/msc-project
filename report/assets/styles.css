@@ -1,0 +1,76 @@
+<style>
+@media print {
+  .markdown-body, html {
+    font-size: 12pt;
+    margin: 0;
+  }
+  .markdown-body code { background-color: #fff; }
+}
+.markdown-body {
+  font-family: "Iowan Old Style", Palatino, serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  margin: 0;
+}
+.markdown-body hr {
+  height: 2pt;
+  background-color: #212121;
+}
+.markdown-body h2 { border: 0 }
+.preview.wrapper, #preview.cover { padding: 0; }
+
+.page {
+  page-break-after: auto;
+  page-break-inside: avoid;
+  position: relative;
+  max-width: 191mm;
+  margin: 0 auto;
+  padding: 2cm;
+}
+.page.break > p:last-of-type::after {
+	content: "";
+	display: inline-block;
+	width: 100%;
+}
+.page-num {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.6cm;
+  margin: 0 auto;
+  text-align: center;
+}
+.page.code p { margin-bottom: 0; }
+.content > p, .content li {
+  line-height: 1.7;
+  text-align: justify;
+}
+.content > p:not(:first-of-type) { text-indent: 1cm; }
+.content p, .content center { overflow: scroll }
+.table > p~ul { margin-top: -12px; }
+.table ul {
+  list-style-type: none;
+  padding-left: 1.2em;
+}
+
+.fig {
+  width: 75%;
+  margin: 0 auto;
+}
+.col.half {
+  width: 49.5%;
+  display: inline-block;
+  vertical-align: top;
+}
+.col.half.left:not(.img) {   padding-right: 0.25cm; }
+.col.half.right:not(.img) {   padding-left: 0.25cm; }
+.img > p, .fig > p {
+  margin-bottom: 10px;
+  text-align: center;
+}
+@media screen and (max-width: 520px) {
+  .page { padding: 1cm; }
+  .markdown-body, html { font-size: 10pt; }
+  .fig, .col.half { width: 100%; }
+}
+</style>
