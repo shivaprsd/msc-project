@@ -415,7 +415,7 @@ Many excellent reviews exist that summarises the developments in the field of sy
 
 Many real-world systems that display self-organisation by synchronisation are collections of interacting elements with a periodic, mostly oscillatory, action. A good example would be the pacemaker cells in the sinoatrial node of the heart that sets the rhythm of the heartbeat. We model them as collections of coupled phase-oscillators, called so because we neglect the amplitude and focus only on the phase of oscillation which is paramount to synchronisation. The Kuramoto model puts forward an all-to-all, purely sinusoidal coupling with uniform strength across the collection, giving rise to the governing equation:
 
-<center> $dot theta_i = omega_i + K/N sum_(j=1)^N sin(theta_j - theta_i) quad (i = 1, 2, ..., N)$ <a name="eq1" style="float: right; margin-top: 4px;">$(1)$</a></center>
+<center class="eqn"> $dot theta_i = omega_i + K/N sum_(j=1)^N sin(theta_j - theta_i) quad (i = 1, 2, ..., N)$ <a name="eq1" style="float: right; margin-top: 4px;">$(1)$</a></center>
 
 where $theta_i$ and $omega_i$ are the phase and natural frequency of the $i^"th"$ oscillator respectively, $K$ is the coupling constant, and the overdot stands for time derivative. The $1//N$ factor is to ensure convergence in the thermodynamics limit ($N -> oo$). The frequencies $omega_i$ need not be the same for all $i$, as oscillators in a natural collection are never identical; they are usually distributed according to some function g(ω) symmetric about its mean frequency. Due to the rotational symmetry of the model, we can use a rotating frame and hence set
 
@@ -434,7 +434,7 @@ The presence of the sine term in the interaction makes it a non-linear model. It
 
 The synchronisation in the system is quantified by the average of the complex phases ($e^(itheta_j)$), called the _macroscopic complex order parameter_,
 
-<center>
+<center class="eqn">
 $tilde r(t) = |r(t)|e^(i phi"("t")") = 1/N sum_(j=1)^N e^(i theta_j"("t")")$ <a name="eq2" style="float: right; margin-top: 5px;">$(2)$</a>
 </center>
 
@@ -469,7 +469,7 @@ With the definition of complex networks in place, we can extend the Kuramoto mod
 
 
 <div class="page content">
-<center>
+<center class="eqn">
 
 $dot theta_i = omega_i + sum_(j=1)^N sigma_(ij) a_(ij) sin(theta_j - theta_i) quad quad (i = 1, 2, ..., N)$ <a name="eq3" style="float: right; margin-top: 4px;">$(3)$</a>
 </center>
@@ -493,7 +493,7 @@ A _simplex_ (also called a _clique_) is a complete subgraph within a larger grap
 
 The cliques of a simplicial complex can facilitate higher-order interaction terms as they bring together more than two nodes, all connected to each other. E.g. a network with 2-simplexes (triangles) formed by at least some of the pairwise links (edges) can support the following extension to the Kuramoto model:
 
-<center>
+<center class="eqn">
 $ dot theta_i = dot theta_i^(K) + sum_j sum_k gamma_(ijk) b_(ijk) sin(2theta_j - theta_k -theta_i) quad quad (i = 1, . . ., N)$
 <a name="eq4" style="float: right;">$(4)$</a>
 </center>

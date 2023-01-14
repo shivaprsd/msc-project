@@ -46,7 +46,7 @@
   text-align: justify;
 }
 .content > p:not(:first-of-type) { text-indent: 1cm; }
-.content p, .content center { overflow: scroll }
+.content .eqn { overflow: scroll }
 .table > p~ul { margin-top: -12px; }
 .table ul {
   list-style-type: none;
