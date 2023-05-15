@@ -30,7 +30,7 @@
         padding: 0 0.6rem;
         overflow: auto;
       }
-      #toggle-theme {
+      #toggle-theme, #github-mark {
         position: absolute;
         top: 0.4rem;
         right: 0.4rem;
@@ -42,9 +42,19 @@
         background-color: #f3f3f3;
         cursor: pointer;
       }
-      #toggle-theme:focus {
+      #github-mark {
+        top: 2.8rem;
+      }
+      #github-mark img {
+        width: 70%;
+        position: relative;
+        top: 0.15rem;
+        background: transparent;
+      }
+      #toggle-theme:focus, #github-mark:focus {
         outline: none;
       }
+
       .night-mode {
         background-color: #212121;
         color: #e0e0e0;
@@ -55,7 +65,7 @@
       .container { overflow: hidden; }
     }
     @media print {
-      #toggle-theme { display: none; }
+      #toggle-theme, #github-mark { display: none; }
       .preview { color: #000000; }
     }
     </style>
@@ -83,6 +93,11 @@
       </div>
     </main>
     <button id="toggle-theme">&#9775;</button>
+    <button id="github-mark">
+      <a href="https://github.com/shivaprsd/msc-project" title="GitHub">
+        <img src="assets/github-mark.png">
+      </a>
+    </button>
 
     <script>
       var preview, converter, toggleTheme;
